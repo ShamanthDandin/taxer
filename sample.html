@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Tax Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: #f3f4f6;
+            color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h2, h3 {
+            color: #2c3e50;
+            text-align: center;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .header-logo img {
+            width: 50px;
+            margin-right: 15px;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar a:hover, .navbar a.active {
+            background-color: #3498db;
+            color: #ffffff;
+        }
+        .main-container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #ffffff;
+            border: 2px solid #d3d3d3;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        .section {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .section.active {
+            display: block;
+        }
+        .form-section {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #eaf2f8;
+            border: 2px solid #3498db;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            background-color: #ecf0f1;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #d3d3d3;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #bdc3c7;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="header-logo">
+        <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\emblem.jpeg" alt="Government Emblem" />
+        <h2>Blockchain-Based Tax Calculator and Government Fund Allocation & Tracking Prototype</h2>
+    </div>
+
+    <div id="login" class="section active form-section">
+        <h3>Login</h3>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter Username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter Password">
+        </div>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="navBar" style="display: none;">
+        <div class="navbar">
+            <a href="#" onclick="showSection('rules', this)">Rules & Regulations</a>
+            <a href="#" onclick="showSection('taxPayers', this)" id="taxPayersLink" style="display: none;">Tax Payers</a>
+            <a href="#" onclick="showSection('ministries', this)" id="ministriesLink" style="display: none;">Ministries</a>
+            <a href="#" onclick="showSection('payeeDetails', this)" id="payeeDetailsLink" style="display: none;">Payee Details</a>
+            <a href="#" onclick="showSection('income', this)" id="incomeLink" style="display: none;">Income Details</a>
+            <a href="#" onclick="showSection('deductions', this)" id="deductionsLink" style="display: none;">Deductions</a>
+            <a href="#" onclick="showSection('ageGroup', this)" id="ageGroupLink" style="display: none;">Age Group</a>
+            <a href="#" onclick="showSection('payTaxes', this)" id="payTaxesLink" style="display: none;">Pay Your Taxes</a>
+            <a href="#" onclick="showSection('taxDistribution', this)" id="taxDistributionLink" style="display: none;">Tax Distribution</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+
+        <!-- Rules & Regulations Section -->
+        <div id="rules" class="section active form-section" style="max-height: 400px; overflow-y: auto;">
+            <h3>Rules & Regulations</h3>
+            <p style="text-align: justify; line-height: 1.6;">
+                <strong>Overview of the Indian Taxation System</strong><br>
+                India’s tax structure comprises <strong>Direct</strong> and <strong>Indirect Taxes</strong> to support public services, infrastructure, and development initiatives.
+            </p>
+            <!-- Direct Taxes Section -->
+            <div style="text-align: left; margin-bottom: 15px;">
+                <h4 style="color: #003366; font-weight: bold;">1. Direct Taxes</h4>
+                <ul style="line-height: 1.6; padding-left: 20px;">
+                    <li><strong>Income Tax</strong>: Applied on the income of individuals, Hindu Undivided Families (HUFs), firms, and corporations. It follows a progressive tax rate for individuals based on income slabs.</li>
+                    <li><strong>Corporate Tax</strong>: Imposed on the profits of domestic and foreign companies in India. Domestic companies are taxed on their global income, while foreign companies are taxed on income generated within India.</li>
+                </ul>
+            </div>
+            <!-- Indirect Taxes Section -->
+            <div style="text-align: left; margin-bottom: 15px;">
+                <h4 style="color: #003366; font-weight: bold;">2. Indirect Taxes</h4>
+                <ul style="line-height: 1.6; padding-left: 20px;">
+                    <li><strong>Goods and Services Tax (GST)</strong>: A nationwide tax system that unifies indirect taxes under one framework, replacing taxes like VAT and excise duty.</li>
+                    <li><strong>Customs Duty</strong>: Levied on goods imported into India to regulate trade and protect domestic industries.</li>
+                </ul>
+            </div>
+            <!-- Key Rules and Regulations Section -->
+            <div style="text-align: left; margin-bottom: 15px;">
+                <h4 style="color: #003366; font-weight: bold;">Key Rules and Regulations</h4>
+                <ul style="line-height: 1.6; padding-left: 20px;">
+                    <li><strong>Income Tax Act, 1961</strong>: Governs all aspects of income tax in India, including deductions, exemptions, and filing requirements.</li>
+                    <li><strong>Annual Income Tax Filing</strong>: Individuals and companies must file annual returns, detailing income and deductions.</li>
+                    <li><strong>Tax Deducted at Source (TDS)</strong>: Tax collected at income generation points, such as salaries and rents, to prevent evasion.</li>
+                </ul>
+            </div>
+            <!-- Content Above Image -->
+            <p style="text-align: center; font-weight: bold; margin-top: 20px;">
+                For the fiscal year 2024-25 (Assessment Year 2025-26), India's income tax structure offers two regimes: the Old Tax Regime and the New Tax Regime.
+            </p>
+            <!-- Image with Caption -->
+            <div style="margin-top: 10px; text-align: center;">
+                <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\new_tax_slabs-sixteen_nine.webp" 
+                     alt="Indian Taxation Rules" 
+                     style="width:100%; max-width:600px; display:block; margin:auto; border-radius:8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);" 
+                     loading="lazy">
+                <p style="color: #666; font-size: 14px; margin-top: 8px;">Figure: Overview of New Tax Slabs for 2024-2025</p>
+            </div>
+        </div>
+
+        <div id="payeeDetails" class="section form-section">
+            <h3>Payee Details</h3>
+            <div class="form-group">
+                <label for="payeeName">Payee Name:</label>
+                <input type="text" id="payeeName" placeholder="Enter Payee Name">
+            </div>
+            <div class="form-group">
+                <label for="panCard">PAN Card Number:</label>
+                <input type="text" id="panCard" placeholder="Enter PAN Card Number">
+            </div>
+            <button onclick="submitPayeeDetails()">Submit Payee Details</button>
+        </div>
+
+        
+
+
+
+        <!-- Income Details Section -->
+        <div id="income" class="section form-section">
+            <h3>Income Details</h3>
+            <div class="form-group">
+                <label for="salaryIncome">Gross Salary Income (₹):</label>
+                <input type="text" id="salaryIncome" placeholder="Enter gross salary">
+            </div>
+            <div class="form-group">
+                <label for="interestIncome">Annual Income from Interest (₹):</label>
+                <input type="text" id="interestIncome" placeholder="Enter interest income">
+            </div>
+            <div class="form-group">
+                <label for="rentalIncome">Rental Income Received (₹):</label>
+                <input type="text" id="rentalIncome" placeholder="Enter rental income">
+            </div>
+            <div class="form-group">
+                <label for="digitalIncome">Income from Digital Assets (₹):</label>
+                <input type="text" id="digitalIncome" placeholder="Enter digital asset income">
+            </div>
+        </div>
+
+        <!-- Deductions Section -->
+        <div id="deductions" class="section form-section">
+            <h3>Tax Deduction Details</h3>
+            <div class="form-group">
+                <label>80C Deduction (₹):</label>
+                <input type="text" id="deduction80C" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label>80D Deduction (₹):</label>
+                <input type="text" id="deduction80D" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label>80E Deduction (₹):</label>
+                <input type="text" id="deduction80E" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label>80G Deduction (₹):</label>
+                <input type="text" id="deduction80G" placeholder="Enter amount">
+            </div>
+            <div class="form-group">
+                <label>80EEA Deduction (₹):</label>
+                <input type="text" id="deduction80EEA" placeholder="Enter amount">
+            </div>
+        </div>
+
+       <!-- Age Group Section -->
+       <div id="ageGroup" class="section form-section">
+        <h3>Select Your Age Group</h3>
+        <div class="form-group">
+            <select id="ageGroupSelect">
+                <option value="0-60">0-60</option>
+                <option value="60-80">60-80</option>
+                <option value="80+">80+</option>
+            </select>
+        </div>
+        <button onclick="submitDetails()">Submit Details</button>
+    </div>
+
+        <!-- Ministries Section (Admin Only) -->
+<div id="ministries" class="section form-section" style="max-height: 300px; overflow-y: auto;">
+    <h3>Ministries</h3>
+    <div class="ministry-icons">
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of Defense.jpeg" alt="Ministry of Defense">
+            <span>Ministry of Finance</span>
+        </div>
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of Finance.jpeg" alt="Ministry of Finance">
+            <span>Ministry of Foreign Affairs</span>
+        </div>
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of FA.jpeg" alt="Ministry of Foreign Affairs">
+            <span>Ministry of Health</span>
+        </div>
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of Health.jpeg" alt="Ministry of Health">
+            <span>Ministry of Agriculture</span>
+        </div>
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of Defense.jpeg" alt="Ministry of Defense">
+            <span>Ministry of Transport</span>
+        </div>
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of Finance.jpeg" alt="Ministry of Finance">
+            <span>Ministry of Energy</span>
+        </div>
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of FA.jpeg" alt="Ministry of Science & Technology">
+            <span>Ministry of Science & Technology</span>
+        </div>
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of Health.jpeg" alt="Ministry of Housing">
+            <span>Ministry of Housing</span>
+        </div>
+        <div class="ministry-item">
+            <img src="C:\Users\Bhoomika Nataraj\Desktop\major proj\Ministry of FA.jpeg" alt="Ministry of Crisis Management">
+            <span>Crisis Management Fund</span>
+        </div>
+    </div>
+</div>
+</div>
+<div id="payTaxes" class="section form-section">
+    <h3>Pay Your Taxes</h3>
+    <p><strong>Payee Name:</strong> <span id="payeeNameDisplay"></span></p>
+    <p><strong>PAN Card Number:</strong> <span id="panCardDisplay"></span></p>
+    <p><strong>Final Tax Amount:</strong> ₹<span id="finalTaxAmountDisplay"></span></p>
+    <button onclick="alert('Redirecting to payment gateway...')">Proceed to Pay</button>
+</div>
+
+<!-- Tax Payers Section (Admin Only) -->
+ <div id="taxPayers" class="section form-section">
+    <h3>Tax Payers (Blockchain Records)</h3>
+    <table id="taxpayerTable">
+        <thead>
+            <tr>
+                <th>PAN Card No.</th>
+                <th>Name</th>
+                <th>Income</th>
+                <th>Tax Paid</th>
+                <th>Timestamp</th>
+                <th>Hash</th>
+            </tr>
+        </thead>
+        <tbody>
+        <!-- Blockchain records populated here -->
+        </tbody>
+    </table>
+    <button onclick="fetchBlockchainRecords()">Refresh Blockchain Data</button>
+</div>
+        
+         <!-- Tax Distribution Section -->
+         <div id="taxDistribution" class="section form-section" style="max-height: 400px; overflow-y: auto;">
+            <h3>Tax Allocation</h3>
+            <canvas id="barChart" width="400" height="200"></canvas>
+            <canvas id="pieChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    
+    let role = null;
+    let payeeName = "";
+    let panCard = "";
+    let finalTaxAmount = 0;
+
+    async function submitTaxRecord() {
+        const name = document.getElementById("payeeName").value;
+        const panCard = document.getElementById("panCard").value;
+        const income = parseFloat(document.getElementById("income").value);
+        const taxPaid = parseFloat(document.getElementById("taxPaid").value);
+
+        const record = { name, pan_card: panCard, income, tax_paid: taxPaid };
+
+        try {
+            const response = await fetch('/add_record', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            });
+            const result = await response.json();
+            if (response.ok) {
+                alert("Record added successfully to the blockchain.");
+                fetchBlockchainRecords();
+            } else {
+                alert(result.error || "Error adding record.");
+            }
+        } catch (error) {
+            console.error("Error submitting record:", error);
+            alert("Error adding record.");
+        }
+    }
+
+    // Fetch and display all blockchain records in the Tax Payers table
+    async function fetchBlockchainRecords() {
+        try {
+            const response = await fetch('/view_blockchain');
+            const records = await response.json();
+            const tableBody = document.getElementById("taxpayerTable").getElementsByTagName("tbody")[0];
+            tableBody.innerHTML = '';  // Clear previous records
+
+            records.forEach(record => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${record.pan_card}</td>
+                    <td>${record.name}</td>
+                    <td>₹${record.income}</td>
+                    <td>₹${record.tax_paid}</td>
+                    <td>${record.timestamp}</td>
+                    <td>${record.hash}</td>
+                `;
+            });
+        } catch (error) {
+            console.error("Error fetching blockchain records:", error);
+            alert("Error loading blockchain data.");
+        }
+    }
+
+    function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        resetPage();
+
+        if (username === "admin" && password === "admin123") {
+            role = "admin";
+            showAdminSections();
+            showSection('rules');
+        } else if (username === "user" && password === "user123") {
+            role = "user";
+            showUserSections();
+            showSection('rules');
+        } else {
+            alert("Invalid credentials. Please try again.");
+        }
+    }
+
+    function showAdminSections() {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("navBar").style.display = "block";
+        document.getElementById("taxPayersLink").style.display = "block";
+        document.getElementById("ministriesLink").style.display = "block";
+    }
+
+    function showUserSections() {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("navBar").style.display = "block";
+        document.getElementById("payeeDetailsLink").style.display = "block";
+        document.getElementById("incomeLink").style.display = "block";
+        document.getElementById("deductionsLink").style.display = "block";
+        document.getElementById("ageGroupLink").style.display = "block";
+        document.getElementById("taxDistributionLink").style.display = "block";
+        document.getElementById("payTaxesLink").style.display = "block";
+    }
+
+    function logout() {
+        role = null;
+        resetPage();
+    }
+
+    function resetPage() {
+        document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+        document.getElementById("username").value = '';
+        document.getElementById("password").value = '';
+        document.getElementById("login").style.display = "block";
+        document.getElementById("navBar").style.display = "none";
+        document.querySelectorAll('.navbar a').forEach(nav => nav.classList.remove('active'));
+        resetNavLinks();
+    }
+
+    function resetNavLinks() {
+        const links = ["taxPayersLink", "ministriesLink", "payeeDetailsLink", "incomeLink", "deductionsLink", "ageGroupLink", "taxDistributionLink", "payTaxesLink"];
+        links.forEach(link => document.getElementById(link).style.display = "none");
+    }
+
+    function showSection(sectionId, link) {
+        document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.navbar a').forEach(nav => nav.classList.remove('active'));
+        if (link) link.classList.add('active');
+        
+        // Update Pay Your Taxes section with data
+        if (sectionId === 'payTaxes') {
+            document.getElementById("payeeNameDisplay").innerText = payeeName;
+            document.getElementById("panCardDisplay").innerText = panCard;
+            document.getElementById("finalTaxAmountDisplay").innerText = formatIndianNumber(finalTaxAmount.toFixed(2));
+        }
+    }
+
+    function formatIndianNumber(num) {
+        const parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/(\d)(?=(\d\d)+\d$)/g, "$1,");
+        return parts.join(".");
+    }
+
+    function submitPayeeDetails() {
+        payeeName = document.getElementById("payeeName").value;
+        panCard = document.getElementById("panCard").value;
+
+        if (payeeName && panCard) {
+            alert("Payee details submitted successfully!");
+            showSection("income", document.querySelector("#incomeLink"));
+        } else {
+            alert("Please fill in all fields.");
+        }
+    }
+    
+    function submitDetails() {
+    const salaryIncome = parseFloat(document.getElementById("salaryIncome").value) || 0;
+    const interestIncome = parseFloat(document.getElementById("interestIncome").value) || 0;
+    const rentalIncome = parseFloat(document.getElementById("rentalIncome").value) || 0;
+    const digitalIncome = parseFloat(document.getElementById("digitalIncome").value) || 0;
+    const totalIncome = salaryIncome + interestIncome + rentalIncome + digitalIncome;
+
+    const deductions = [
+        parseFloat(document.getElementById("deduction80C").value) || 0,
+        parseFloat(document.getElementById("deduction80D").value) || 0,
+        parseFloat(document.getElementById("deduction80E").value) || 0,
+        parseFloat(document.getElementById("deduction80G").value) || 0,
+        parseFloat(document.getElementById("deduction80EEA").value) || 0
+    ].reduce((a, b) => a + b, 0);
+
+    const taxableIncome = Math.max(totalIncome - deductions, 0);
+
+    // Calculate and assign the final tax amount
+    finalTaxAmount = calculateTax(taxableIncome);
+
+    // Render charts with the calculated finalTaxAmount
+    renderCharts(finalTaxAmount);
+
+    // Display message and navigate to "Pay Your Taxes"
+    alert("Details submitted successfully!");
+
+    // Show both tax allocation and "Pay Your Taxes" sections
+    showSection("taxDistribution", document.querySelector("#taxDistributionLink"));
+    showSection("payTaxes", document.querySelector("#payTaxesLink"));
+    
+    // Highlight the "Tax Distribution" tab in the navbar
+    document.querySelectorAll('.navbar a').forEach(nav => nav.classList.remove('active'));
+    document.querySelector('.navbar a[href*="taxDistribution"]').classList.add('active');
+}
+
+    
+    function calculateTax(taxableIncome) {
+        let tax = 0;
+        
+        if (taxableIncome <= 300000) {
+            tax = 0;
+        } else if (taxableIncome <= 600000) {
+            tax = (taxableIncome - 300000) * 0.05;
+        } else if (taxableIncome <= 900000) {
+            tax = (300000 * 0.05) + (taxableIncome - 600000) * 0.1;
+        } else if (taxableIncome <= 1200000) {
+            tax = (300000 * 0.05) + (300000 * 0.1) + (taxableIncome - 900000) * 0.15;
+        } else if (taxableIncome <= 1500000) {
+            tax = (300000 * 0.05) + (300000 * 0.1) + (300000 * 0.15) + (taxableIncome - 1200000) * 0.2;
+        } else {
+            tax = (300000 * 0.05) + (300000 * 0.1) + (300000 * 0.15) + (300000 * 0.2) + (taxableIncome - 1500000) * 0.3;
+        }
+
+        return tax;
+    }
+
+    function renderCharts(finalTaxAmount) {
+        const allocations = {
+            'Ministry of Defense': 15,
+            'Ministry of Finance': 13,
+            'Ministry of Foreign Affairs': 10,
+            'Ministry of Health': 11,
+            'Ministry of Agriculture': 12,
+            'Ministry of Transport': 9,
+            'Ministry of Energy': 9,
+            'Ministry of Science & Technology': 6,
+            'Ministry of Housing': 3,
+            'Crisis Management Fund': 12
+        };
+        const labels = Object.keys(allocations);
+        const percentages = Object.values(allocations);
+        const amounts = percentages.map(p => (p / 100) * finalTaxAmount);
+        const chartColors = ['#305A72', '#86BCB6', '#F2B134', '#A5525F'];
+
+        const barCtx = document.getElementById("barChart").getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: { labels, datasets: [{ label: 'Amount Allocated (₹)', data: amounts, backgroundColor: chartColors }] },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    title: { display: true, text: `Tax Revenue Distribution (Total: ₹${formatIndianNumber(finalTaxAmount.toFixed(2))})` },
+                    tooltip: {
+                        callbacks: {
+                            label: (tooltipItem) => {
+                                const label = labels[tooltipItem.dataIndex];
+                                const amount = amounts[tooltipItem.dataIndex];
+                                const percent = percentages[tooltipItem.dataIndex];
+                                return `${label}: ₹${formatIndianNumber(amount.toFixed(2))} (${percent}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const pieCtx = document.getElementById("pieChart").getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: { labels, datasets: [{ data: amounts, backgroundColor: chartColors }] },
+            options: {
+                plugins: {
+                    title: { display: true, text: `Tax Revenue Distribution (Total: ₹${formatIndianNumber(finalTaxAmount.toFixed(2))})` },
+                    tooltip: {
+                        callbacks: {
+                            label: (tooltipItem) => {
+                                const label = labels[tooltipItem.dataIndex];
+                                const amount = amounts[tooltipItem.dataIndex];
+                                const percent = percentages[tooltipItem.dataIndex];
+                                return `${label}: ₹${formatIndianNumber(amount.toFixed(2))} (${percent}%)`;
+                            }
+                        }
+                    },
+                    legend: { position: 'right' }
+                }
+            }
+        });
+    }
+
+
+
+</script>
+
+</body>
+</html>
