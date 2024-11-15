@@ -32,13 +32,7 @@ export default function Home() {
             Sign Up
           </button>
         </div>
-        
-      
-        
       </div>
     </div>
   );
 }
-//payee details store username and pancard number
-//income details idk
-// deduction

@@ -21,12 +21,8 @@ const SigninForm = () => {
         setMessage(response.data.message);
         alert(response.data.message);
 
-        // Ensure email is valid before proceeding
         if (formData.email && typeof formData.email === 'string') {
-            // Store email in localStorage
             localStorage.setItem('userEmail', formData.email);
-
-            // Redirect to /home
             router.push('/home');
         } else {
             throw new Error("Invalid email format");
