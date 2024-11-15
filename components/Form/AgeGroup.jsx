@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-export default function AgeGroup() {
+export default function AgeGroup({ onSubmit }) {
   const [ageGroup, setAgeGroup] = useState('0-60');
 
   const submitDetails = () => {
-    console.log("Selected Age Group:", ageGroup);
-    // Add any submission logic here, e.g., sending data to a backend
+    // Pass selected age group as an array to the parent component
+    onSubmit([ageGroup]);
   };
 
   return (

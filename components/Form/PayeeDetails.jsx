@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 
-export default function PayeeDetails() {
+export default function PayeeDetails({ onSubmit }) {
   const [payeeName, setPayeeName] = useState('');
   const [panCard, setPanCard] = useState('');
 
   const submitPayeeDetails = () => {
-    // Here you can handle form submission, e.g., send data to the backend
-    console.log("Payee Name:", payeeName);
-    console.log("PAN Card Number:", panCard);
+    // Pass data as an array of strings to the parent component
+    onSubmit([payeeName, panCard]);
   };
 
   return (

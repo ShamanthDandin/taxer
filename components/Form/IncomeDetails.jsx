@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 
-export default function IncomeDetails() {
+export default function IncomeDetails({ onSubmit }) {
   const [salaryIncome, setSalaryIncome] = useState('');
   const [interestIncome, setInterestIncome] = useState('');
   const [rentalIncome, setRentalIncome] = useState('');
   const [digitalIncome, setDigitalIncome] = useState('');
 
   const handleSubmit = () => {
-    console.log("Gross Salary Income:", salaryIncome);
-    console.log("Annual Income from Interest:", interestIncome);
-    console.log("Rental Income Received:", rentalIncome);
-    console.log("Income from Digital Assets:", digitalIncome);
-    // Add any submission logic here, e.g., sending data to a backend
+    // Pass the data as an array of strings to the parent component
+    onSubmit([
+      salaryIncome.toString(),
+      interestIncome.toString(),
+      rentalIncome.toString(),
+      digitalIncome.toString()
+    ]);
   };
 
   return (

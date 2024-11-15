@@ -1,15 +1,16 @@
 "use client";
 import { useState, useEffect } from 'react';
-import RulesAndRegulations from '@/components/Content/Rules';
-import PayeeDetails from '@/components/Content/PayeeDetails';
-import IncomeDetails from '@/components/Content/IncomeDetails';
-import Deductions from '@/components/Content/Deduction';
-import PayTaxes from '@/components/Content/PayTaxes';
-import AgeGroup from '@/components/Content/AgeGroup';
-import TaxDistribution from '@/components/Content/TaxDist';
+import RulesAndRegulations from '@/components/Rules';
+import PayeeDetails from '@/components/Form/PayeeDetails';
+import IncomeDetails from '@/components/Form/IncomeDetails';
+import Deductions from '@/components/Form/Deduction';
+import PayTaxes from '@/components/Form/PayTaxes';
+import AgeGroup from '@/components/Form/AgeGroup';
+import TaxDistribution from '@/components/TaxDist';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import AdminComponent from '@/components/Admin';
+import Form from '@/components/Form';
 
 
 export default function HomePage() {
@@ -32,7 +33,7 @@ export default function HomePage() {
 
             if (success && user) {
                 setRole(user.role);
-                setUsers([user]); // Adjust as needed if 'users' should store multiple entries
+                setUsers([user]); 
             }
 
             setLoading(false);
@@ -55,8 +56,8 @@ if (loading) {
     switch (activeComponent) {
       case 'rules':
         return <RulesAndRegulations />;
-      case 'payeeDetails':
-        return <PayeeDetails />;
+      case 'form':
+        return <Form />;
       case 'income':
         return <IncomeDetails />;
       case 'deductions':
@@ -92,11 +93,11 @@ if (loading) {
       )}
       <li
         className="cursor-pointer hover:bg-gray-700 px-4 py-2 rounded transition duration-200"
-        onClick={() => setActiveComponent('payeeDetails')}
+        onClick={() => setActiveComponent('form')}
       >
-        Payee Details
+        Calculate Tax
       </li>
-      <li
+      {/* <li
         className="cursor-pointer hover:bg-gray-700 px-4 py-2 rounded transition duration-200"
         onClick={() => setActiveComponent('income')}
       >
@@ -119,7 +120,7 @@ if (loading) {
         onClick={() => setActiveComponent('payTaxes')}
       >
         Pay Your Taxes
-      </li>
+      </li> */}
       <li
         className="cursor-pointer hover:bg-gray-700 px-4 py-2 rounded transition duration-200"
         onClick={() => setActiveComponent('taxDistribution')}

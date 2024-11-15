@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function Deductions() {
+export default function Deductions({ onSubmit }) {
   const [deduction80C, setDeduction80C] = useState('');
   const [deduction80D, setDeduction80D] = useState('');
   const [deduction80E, setDeduction80E] = useState('');
@@ -8,12 +8,14 @@ export default function Deductions() {
   const [deduction80EEA, setDeduction80EEA] = useState('');
 
   const handleSubmit = () => {
-    console.log("80C Deduction:", deduction80C);
-    console.log("80D Deduction:", deduction80D);
-    console.log("80E Deduction:", deduction80E);
-    console.log("80G Deduction:", deduction80G);
-    console.log("80EEA Deduction:", deduction80EEA);
-    // Add any submission logic here, e.g., sending data to a backend
+    // Pass the data as an array of strings to the parent component
+    onSubmit([
+      deduction80C.toString(),
+      deduction80D.toString(),
+      deduction80E.toString(),
+      deduction80G.toString(),
+      deduction80EEA.toString()
+    ]);
   };
 
   return (
