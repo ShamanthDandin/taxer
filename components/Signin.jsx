@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const SigninForm = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
+  const router = useRouter()
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -11,16 +14,18 @@ const SigninForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+
     try {
-        console.log("in auth signin")
-      const response = await axios.post('/api/signin', formData);
-      setMessage(response.data.message);
-      alert(response.data.message);
-      // Redirect or set authentication state here
+        console.log("in auth signin");
+        const response = await axios.post('/api/signin', formData);
+        setMessage(response.data.message);
+        alert(response.data.message);
+        router.push('/home');
     } catch (error) {
-      setMessage(error.response.data.message);
+        setMessage(error.response?.data?.message || "An error occurred.");
     }
-  };
+};
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md max-w-sm mx-auto">

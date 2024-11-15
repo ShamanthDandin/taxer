@@ -1,8 +1,10 @@
 
 import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const SignupForm = () => {
+  const router = useRouter()
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
 
@@ -23,7 +25,7 @@ const SignupForm = () => {
       const response = await axios.post('/api/signup', formData);
       setMessage(response.data.message);
       alert(response.data.message);
-      // Redirect or set authentication state here
+      router.push('/home');
     } catch (error) {
       console.error("Error in signup:", error);
       
