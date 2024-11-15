@@ -1,5 +1,5 @@
-import conn from '../../../lib/conn';
-import User from '../../../models/user';
+import conn from '@/app/lib/conn';
+import User from '@/app/models/user';
 
 export async function POST(req) {
   await conn();

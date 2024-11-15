@@ -14,33 +14,32 @@ const SignupForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-  
+
+    // Check if email and password are provided
     if (!formData.email || !formData.password) {
-      setMessage("Please fill in both email and password.");
-      return;
+        setMessage("Please fill in both email and password.");
+        return;
     }
+
     try {
-      console.log("Attempting to sign up...");
-      const response = await axios.post('/api/signup', formData);
-      setMessage(response.data.message);
-      alert(response.data.message);
-      router.push('/home');
+        console.log("Attempting to sign up...");
+        const response = await axios.post('/api/signup', formData);
+        setMessage(response.data.message);
+        alert(response.data.message);
+        localStorage.setItem('userEmail', formData.email);
+        router.push('/home');
     } catch (error) {
-      console.error("Error in signup:", error);
-      
-     
-      if (error.response) {
-        setMessage(error.response.data.message);
-      } else if (error.request) {
-      
-        setMessage("No response from the server. Please try again later.");
-      } else {
-     
-        setMessage("An unexpected error occurred. Please try again.");
-      }
+        console.error("Error in signup:", error);
+        if (error.response) {
+            setMessage(error.response.data.message || "Signup failed. Please try again.");
+        } else if (error.request) {
+            setMessage("No response from the server. Please try again later.");
+        } else {
+            setMessage("An unexpected error occurred. Please try again.");
+        }
     }
-  };
+};
+
   
   
 

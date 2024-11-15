@@ -8,8 +8,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 space-y-8">
-      
-      
       <div className="text-center p-6 bg-white rounded-lg shadow-lg max-w-4xl">
         <h2 className="text-3xl font-bold text-gray-800 mb-4">
           Blockchain-Based Tax Calculator and Government Fund Allocation & Tracking Prototype

@@ -14,18 +14,30 @@ const SigninForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
 
     try {
         console.log("in auth signin");
         const response = await axios.post('/api/signin', formData);
         setMessage(response.data.message);
         alert(response.data.message);
-        router.push('/home');
+
+        // Ensure email is valid before proceeding
+        if (formData.email && typeof formData.email === 'string') {
+            // Store email in localStorage
+            localStorage.setItem('userEmail', formData.email);
+
+            // Redirect to /home
+            router.push('/home');
+        } else {
+            throw new Error("Invalid email format");
+        }
     } catch (error) {
         setMessage(error.response?.data?.message || "An error occurred.");
+        console.error("Error during sign-in:", error);
     }
 };
+
+
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md max-w-sm mx-auto">
