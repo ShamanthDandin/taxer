@@ -10,8 +10,8 @@ export async function GET(req) {
     });
   }
   try {
-    const transactions = await Transaction.find({}, '-_id -__v');
-
+    // Fetch all transactions and select only the 'tax' field
+    const transactions = await Transaction.find({}, 'tax');
     if (!transactions || transactions.length === 0) {
       return new Response(
         JSON.stringify({ success: false, message: 'No transactions found' }),
@@ -22,10 +22,17 @@ export async function GET(req) {
       );
     }
 
-    return new Response(JSON.stringify({ success: true, data: transactions }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    // Calculate the total amount of tax
+    const totalTax = transactions.reduce((sum, transaction) => sum + transaction.tax, 0);
+
+    // Return the total tax amount
+    return new Response(
+      JSON.stringify({ success: true, totalTax }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   } catch (error) {
     console.error('Error fetching transactions:', error);
     return new Response(JSON.stringify({ success: false, message: 'Server error' }), {
