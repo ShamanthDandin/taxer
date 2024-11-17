@@ -1,109 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import Web3 from 'web3';
+import React from 'react';
+import { parseEther, BrowserProvider } from 'ethers';
+
+
+
 
 export default function PayTaxes({ name, panCard, tax, formData, onSubmit }) {
-  const [web3, setWeb3] = useState(null);
-
-  // Initialize Web3 on component mount
-  useEffect(() => {
-    if (typeof window.ethereum !== 'undefined') {
-      const web3Instance = new Web3(window.ethereum);
-      setWeb3(web3Instance);
-      console.log("Web3 initialized with MetaMask provider.");
-    } else {
-      console.error("MetaMask is not installed.");
-      alert("Please install MetaMask to use this feature.");
-    }
-  }, []);
-
   const proceedToPay = async () => {
-    if (!web3) {
-      alert("Web3 is not initialized. Please install MetaMask and try again.");
-      return;
-    }
-
-    console.log("Form Data:", formData);
-    alert('Redirecting to payment gateway...');
-
-    // Ensure MetaMask is connected
-    if (!window.ethereum.selectedAddress) {
-      try {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        console.log("MetaMask connected successfully.");
-      } catch (error) {
-        if (error.code === -32002) {
-          alert("MetaMask request is already pending. Please complete the MetaMask prompt or try again.");
-        } else {
-          console.error("MetaMask connection failed:", error);
-          alert("Please connect to MetaMask and try again.");
-        }
-        return;
-      }
-    }
-
-    // Define the tax amount and conversion rate
-    const finalTaxAmountInINR = tax; // Assuming tax amount is in INR (e.g., 25000 INR)
-    console.log("Final Tax Amount in INR:", finalTaxAmountInINR);
-
-    const ethToInrRate = 267161.81; // Update to the current ETH to INR conversion rate if needed
-    console.log("ETH to INR Conversion Rate:", ethToInrRate);
-
-    // Convert the tax amount from INR to ETH
-    const ethAmount = parseFloat((finalTaxAmountInINR / ethToInrRate).toFixed(8));
-    console.log("Converted Final Tax Amount in ETH:", ethAmount);
-
     try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      console.log("MetaMask accounts:", accounts);
-
-      const senderAddress = "0xC12D8913A43D6Df31F05c2c45d432cCaEC83bb6e";
-      const receiverAddress = "0x7E9F09c1B8ABb6eF9043EcC53388E9888FfA1DDD";
-
-      if (accounts[0].toLowerCase() !== senderAddress.toLowerCase()) {
-        alert(`Please switch to the correct sender address: ${senderAddress}`);
-        return;
+      console.log('Form Data:', formData);
+  
+      // Conversion logic: Assume 1 ETH = 263,157.89 (adjust this as needed)
+      const ethConversionRate = 263157.89; // 1 ETH = 263,157.89 INR
+      const taxInEth = tax / ethConversionRate; // Tax in ETH
+      const taxInWei = parseEther(taxInEth.toString()); // Convert ETH to Wei
+  
+      console.log(`Tax in ETH: ${taxInEth}`);
+      console.log(`Tax in Wei: ${taxInWei.toString()}`);
+  
+      // MetaMask interaction
+      if (typeof window.ethereum !== 'undefined') {
+        const provider = new BrowserProvider(window.ethereum); // Updated for ethers v6
+        const signer = await provider.getSigner();
+  
+        // Request MetaMask connection
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+  
+        // Send transaction
+        const transaction = await signer.sendTransaction({
+          to: '0xf402276963261E2B6a836e53bAc67523feaC214a', // Receiver address
+          value: taxInWei, // Amount in Wei
+        });
+  
+        console.log('Transaction sent:', transaction);
+  
+        // Wait for the transaction to be mined
+        const receipt = await provider.waitForTransaction(transaction.hash);
+        console.log('Transaction mined:', receipt);
+  
+        // Fetch block details to get the timestamp
+        const block = await provider.getBlock(receipt.blockNumber);
+  
+        // Extract relevant details
+        const transactionDetails = {
+          panCard,
+          name,
+          income: formData.income, // Pass this as a prop or fetch from the form data
+          tax,
+          timestamp: new Date(block.timestamp * 1000).toISOString(), // Convert UNIX timestamp to readable format
+          blockHash: receipt.blockHash, // Block hash
+          transactionHash: transaction.hash, // Transaction hash
+        };
+  
+        console.log('Transaction Details:', transactionDetails);
+  
+        alert(
+          `Transaction Successful!\nMined On: ${transactionDetails.timestamp}\nBlock Hash: ${transactionDetails.blockHash}`
+        );
+  
+        // Call onSubmit callback with form data
+        onSubmit([name, panCard, tax.toString()]);
+      } else {
+        alert('MetaMask is not installed. Please install MetaMask to proceed.');
       }
-
-      // Convert ETH amount to Wei for the transaction
-      const amountInWei = web3.utils.toWei(ethAmount.toString(), 'ether');
-      console.log("Amount in Wei (to be sent):", amountInWei);
-
-      const transactionParameters = {
-        to: receiverAddress,
-        from: senderAddress,
-        value: amountInWei,
-        gas: '21000' // Standard gas limit for ETH transfer
-      };
-
-      console.log("Initiating transaction with parameters:", transactionParameters);
-
-      const txHash = await window.ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [transactionParameters],
-      });
-
-      console.log('Transaction successful! TxHash:', txHash);
-      alert(`Transaction of ${ethAmount.toFixed(6)} ETH initiated successfully!`);
     } catch (error) {
-      console.error("Transaction failed:", error);
-      alert("Transaction failed. Please try again.");
+      console.error('Error during transaction:', error);
+      alert('Transaction failed. Please try again.');
     }
   };
+  
 
   return (
-    <div className="section form-section p-6 bg-white rounded-lg shadow-md max-w-md">
-      <h3 className="text-2xl font-bold mb-6">Pay Your Taxes</h3>
-
-      <p className="mb-2"><strong>Payee Name:</strong> <span>{name}</span></p>
-      <p className="mb-2"><strong>PAN Card Number:</strong> <span>{panCard}</span></p>
-      <p className="mb-4"><strong>Final Tax Amount:</strong> ₹<span>{tax}</span></p>
-
+    <div>
+      <h2>Pay Your Taxes</h2>
+      <p><strong>Name:</strong> {name}</p>
+      <p><strong>PAN Card:</strong> {panCard}</p>
+      <p><strong>Tax Amount (INR):</strong> {tax}</p>
       <button
-        onClick={proceedToPay}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
-      >
-        Proceed to Pay
-      </button>
+  onClick={proceedToPay}
+  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+>
+  Proceed to Pay
+</button>
+
     </div>
   );
 }
