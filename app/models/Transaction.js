@@ -10,4 +10,5 @@ const transactionSchema = new mongoose.Schema({
   transactionHash: { type: String, required: true },
 });
 
-export default mongoose.models.Transaction || mongoose.model('Transaction', transactionSchema);
+// Explicitly define the collection name as "transaction"
+export default mongoose.models.Transaction || mongoose.model('Transaction', transactionSchema, 'transaction');

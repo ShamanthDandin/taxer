@@ -21,8 +21,6 @@ async function conn() {
   if (!cached.promise) {
     cached.promise = mongoose
       .connect(MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
         dbName: 'Taxer1', // Set the database name explicitly
       })
       .then((mongoose) => {

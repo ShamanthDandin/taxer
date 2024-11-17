@@ -5,14 +5,19 @@ const AdminComponent = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Function to fetch data from /api/trans
     const fetchData = async () => {
         try {
-            const response = await fetch('/api/admin'); // Adjust if necessary
+            const response = await fetch('/api/trans'); // Fetching from /api/trans
             if (!response.ok) {
-                throw new Error("Failed to fetch data");
+                throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            setTaxPayers(data.users); // Use `data.users` to access the array of users
+            if (data.success) {
+                setTaxPayers(data.data); // Set tax payers from the API response
+            } else {
+                throw new Error('Data fetch unsuccessful');
+            }
             setLoading(false);
         } catch (err) {
             setError(err.message);
@@ -20,9 +25,16 @@ const AdminComponent = () => {
         }
     };
 
+    // Fetch data when the component loads
     useEffect(() => {
         fetchData();
     }, []);
+
+    // Helper function to truncate long strings
+    const truncateString = (str, length = 10) => {
+        if (str.length <= length) return str;
+        return `${str.slice(0, 6)}...${str.slice(-6)}`; // First 6 and last 6 characters
+    };
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -57,19 +69,27 @@ const AdminComponent = () => {
                                 Timestamp
                             </th>
                             <th className="px-6 py-4 bg-gray-600 text-white text-lg font-medium border border-gray-300">
-                                Hash
+                                Block Hash
+                            </th>
+                            <th className="px-6 py-4 bg-gray-600 text-white text-lg font-medium border border-gray-300">
+                                Transaction Hash
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         {taxPayers.map((payer, index) => (
-                            <tr key={index}>
+                            <tr key={index} className="hover:bg-gray-200 transition duration-200">
                                 <td className="px-6 py-4 border border-gray-300">{payer.panCard}</td>
-                                <td className="px-6 py-4 border border-gray-300">{payer.email}</td>
-                                <td className="px-6 py-4 border border-gray-300">{payer.income}</td>
-                                <td className="px-6 py-4 border border-gray-300">{payer.taxPaid}</td>
-                                <td className="px-6 py-4 border border-gray-300">{payer.timestamp}</td>
-                                <td className="px-6 py-4 border border-gray-300">{payer.hash}</td>
+                                <td className="px-6 py-4 border border-gray-300">{payer.name}</td>
+                                <td className="px-6 py-4 border border-gray-300">{payer.income.toLocaleString('en-IN')}</td>
+                                <td className="px-6 py-4 border border-gray-300">{payer.tax.toLocaleString('en-IN')}</td>
+                                <td className="px-6 py-4 border border-gray-300">{new Date(payer.timestamp).toLocaleString()}</td>
+                                <td className="px-6 py-4 border border-gray-300">
+                                    {truncateString(payer.blockHash, 16)}
+                                </td>
+                                <td className="px-6 py-4 border border-gray-300">
+                                    {truncateString(payer.transactionHash, 16)}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
