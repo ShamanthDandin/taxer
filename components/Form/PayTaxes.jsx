@@ -103,9 +103,6 @@ export default function PayTaxes({ name, panCard, tax, formData, onSubmit }) {
         <strong>PAN Card:</strong> {panCard}
       </p>
       <p>
-      <strong>Tax Amount (Without CESS):</strong> {tax ? (tax / 1.04).toFixed(0) : '0'}
-      </p>
-      <p>
         <strong>Tax Amount (With CESS):</strong> {tax ? tax.toLocaleString('en-IN') : '0'}
       </p>
       <button
