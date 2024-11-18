@@ -33,8 +33,8 @@ export default function PayTaxes({ name, panCard, tax, formData, onSubmit }) {
 
   const proceedToPay = async () => {
     try {
+      console.log('final tax', tax);
       console.log('Form Data:', formData);
-
       const income = formData.incomeDetails[0]; // Extract the actual income
       const ethConversionRate = 263157.89; // Static conversion rate
       const taxInEth = tax / ethConversionRate; // Tax in ETH
@@ -103,7 +103,10 @@ export default function PayTaxes({ name, panCard, tax, formData, onSubmit }) {
         <strong>PAN Card:</strong> {panCard}
       </p>
       <p>
-        <strong>Tax Amount (INR):</strong> {tax ? tax.toLocaleString('en-IN') : '0'}
+      <strong>Tax Amount (Without CESS):</strong> {tax ? (tax / 1.04).toFixed(0) : '0'}
+      </p>
+      <p>
+        <strong>Tax Amount (With CESS):</strong> {tax ? tax.toLocaleString('en-IN') : '0'}
       </p>
       <button
         onClick={proceedToPay}

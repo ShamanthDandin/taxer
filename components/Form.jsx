@@ -84,7 +84,7 @@ const Form = () => {
                         <PayTaxes
                         name={formData.payeeDetails[0]}
                         panCard={formData.payeeDetails[1]}
-                        tax={calculatedTax}
+                        tax={calculatedTax * 1.04}
                         formData={formData} 
                         onSubmit={handleFinalSubmit}
                          />

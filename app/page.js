@@ -12,6 +12,16 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-gray-800 mb-4">
           Blockchain-Based Tax Calculator and Government Fund Allocation & Tracking Prototype
         </h2>
+        <div className='flex justify-center'>
+        <img 
+          src="/main.jpg" 
+          alt="Indian" 
+          className="w-60 h-60 object-cover rounded-lg shadow-md" 
+          loading="lazy" 
+        />
+      </div>
+
+       
       </div>
 
  
